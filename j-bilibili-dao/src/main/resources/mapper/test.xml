@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapper namespace="com.bilibili.dao.TestDao">
+    <select id="query" parameterType="java.lang.Long" resultType="java.lang.Long">
+        select id from test where id = #{id}
+    </select>
+</mapper>
