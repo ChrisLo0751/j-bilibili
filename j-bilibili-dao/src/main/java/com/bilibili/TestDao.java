@@ -1,4 +1,4 @@
-package com.bilibili.dao;
+package com.bilibili;
 
 import org.apache.ibatis.annotations.Mapper;
 
