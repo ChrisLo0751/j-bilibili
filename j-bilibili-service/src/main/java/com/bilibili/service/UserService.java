@@ -7,11 +7,13 @@ import com.bilibili.domain.constant.UserConstant;
 import com.bilibili.domain.exception.ConditionException;
 import com.bilibili.service.util.MD5Util;
 import com.bilibili.service.util.RSAUtil;
+import com.bilibili.service.util.TokenUtil;
 import com.mysql.cj.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.regex.Pattern;
 
 @Service
 public class UserService {
@@ -20,11 +22,21 @@ public class UserService {
     private UserDao userDao;
 
     public void addUser(User user) {
-        // 异常判断
         String phone = user.getPhone();
+        // 手机号非空判断
         if (StringUtils.isNullOrEmpty(phone)) {
             throw new ConditionException("手机号不能为空！");
         }
+        // 验证手机号码是否为11位数字
+        if (phone.length() != 11) {
+            throw new ConditionException("手机号格式不正确！");
+        }
+
+        // 验证手机号码是否只包含数字字符
+        if (!Pattern.matches("\\d+", phone)) {
+            throw new ConditionException("手机号包含非法字符！");
+        }
+
         User dbUser = this.getUserByPhone(phone);
         if (dbUser != null) {
             throw new ConditionException("该手机号已经注册！");
@@ -53,9 +65,46 @@ public class UserService {
         userInfo.setBirth(UserConstant.DEFAULT_BIRTH);
         userInfo.setGender(UserConstant.GENDER_MALE);
         userInfo.setCreateTime(now);
+        userDao.addUserInfo(userInfo);
     }
 
     public User getUserByPhone(String phone) {
         return userDao.getUserByPhone(phone);
+    }
+
+    public String login(User user) throws Exception {
+        String phone = user.getPhone() == null ? "" : user.getPhone();
+        String email = user.getEmail() == null ? "" : user.getEmail();
+        if(StringUtils.isNullOrEmpty(phone) && StringUtils.isNullOrEmpty(email)){
+            throw new ConditionException("参数异常！");
+        }
+
+        User dbUser = userDao.getUserByPhone(phone);
+        if(dbUser == null) {
+            throw new ConditionException("当前用户不存在！");
+        }
+
+        String password = user.getPassword();
+        String rawPassword;
+        try {
+            rawPassword = RSAUtil.decrypt(password);
+        } catch (Exception e) {
+            throw new ConditionException("解密失败！");
+        }
+
+        String salt = dbUser.getSalt();
+        String md5Password = MD5Util.sign(rawPassword, salt, "UTF-8");
+        if (!md5Password.equals(dbUser.getPassword())) {
+            throw new ConditionException("密码错误！");
+        }
+
+        return TokenUtil.generateToken(dbUser.getId());
+    }
+
+    public User getUserInfo(Long userId) {
+        User user = userDao.getUserById(userId);
+        UserInfo userInfo = userDao.getUserInfoByUserId(userId);
+        user.setUserInfo(userInfo);
+        return user;
     }
 }

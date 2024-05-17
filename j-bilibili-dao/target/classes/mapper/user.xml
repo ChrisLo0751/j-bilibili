@@ -25,4 +25,40 @@
             #{createTime}
         )
     </insert>
+    <insert id="addUserInfo" parameterType="com.bilibili.domain.UserInfo">
+        INSERT INTO t_user_info (
+            userId,
+            nick,
+            avatar,
+            sign,
+            gender,
+            birth,
+            createTime
+        )
+        VALUES (
+           #{userId},
+           #{nick},
+           #{avatar},
+           #{sign},
+           #{gender},
+           #{birth},
+           #{createTime}
+       )
+    </insert>
+    <select id="getUserById" parameterType="java.lang.Long" resultType="com.bilibili.domain.User">
+        SELECT
+            *
+        FROM
+            t_user
+        WHERE
+            id = #{id}
+    </select>
+    <select id="getUserInfoByUserId" parameterType="java.lang.Long" resultType="com.bilibili.domain.UserInfo">
+        SELECT
+            *
+        FROM
+            t_user_info
+        WHERE
+            id = #{userId}
+    </select>
 </mapper>
