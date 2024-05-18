@@ -61,4 +61,48 @@
         WHERE
             id = #{userId}
     </select>
+    <update id="updateUsers" parameterType="com.bilibili.domain.User">
+        UPDATE
+            t_user
+        SET
+            <if test="email != null and email != ''">
+                email = #{email},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone},
+            </if>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+            <if test="salt != null and salt != ''">
+                salt = #{salt},
+            </if>
+            updateTime = #{updateTime}
+        WHERE
+            id = #{id}
+    </update>
+    <update id="updateUserInfo" parameterType="com.bilibili.domain.UserInfo">
+        UPDATE
+            t_user_info
+        SET
+            <if test="nick != null and nick != '' ">
+                nick = #{nick},
+            </if>
+            <if test="avatar != null">
+                avatar = #{avatar},
+            </if>
+            <if test="avatar != null">
+                sign = #{sign},
+            </if>
+            <if test="birth != null and birth != '' ">
+                birth = #{birth},
+            </if>
+            <if test="gender != null and gender != ''">
+                gender = #{gender}
+            </if>
+            updateTime = #{updateTime}
+        WHERE
+            userId = #{userId}
+    </update>
+
 </mapper>
