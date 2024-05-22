@@ -108,6 +108,10 @@ public class UserService {
         return user;
     }
 
+    public User getUserById(Long userId) {
+        return userDao.getUserById(userId);
+    }
+
     public void updateUserInfos(UserInfo userInfo) {
         userInfo.setUpdateTime(new Date());
         userDao.updateUserInfo(userInfo);
