@@ -104,5 +104,18 @@
         WHERE
             userId = #{userId}
     </update>
-
+    <select id="getUserInfoByUserIds" resultType="com.bilibili.domain.UserInfo">
+        SELECT
+            *
+        FROM
+            t_user_info
+        WHERE
+            1 = 1
+            <if test="userIdList != null and userIdList.size() > 0">
+                AND userId IN
+                <foreach collection="userIds" item="userId" open="(" separator="," close=")">
+                    #{userId}
+                </foreach>
+            </if>
+    </select>
 </mapper>

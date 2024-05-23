@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 @Service
@@ -132,5 +134,9 @@ public class UserService {
 
         user.setUpdateTime(new Date());
         userDao.updateUsers(user);
+    }
+
+    public List<UserInfo> getUserInfoByUserIds(Set<Long> followingSet) {
+        return userDao.getUserInfoByUserIds(followingSet);
     }
 }
