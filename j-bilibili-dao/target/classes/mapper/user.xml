@@ -129,7 +129,7 @@
                 AND nick LIKE '%${nick}%'
             </if>
     </select>
-    <select id="pageListUserInfos" parameterType="ava.util.Map" resultType="com.bilibili.domain.UserInfo">
+    <select id="pageListUserInfos" parameterType="java.util.Map" resultType="com.bilibili.domain.UserInfo">
         SELECT
             *
         FROM
