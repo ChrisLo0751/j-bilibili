@@ -1,6 +1,8 @@
 package com.bilibili.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.bilibili.dao.UserDao;
+import com.bilibili.domain.PageResult;
 import com.bilibili.domain.User;
 import com.bilibili.domain.UserInfo;
 import com.bilibili.domain.constant.UserConstant;
@@ -12,6 +14,7 @@ import com.mysql.cj.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -138,5 +141,24 @@ public class UserService {
 
     public List<UserInfo> getUserInfoByUserIds(Set<Long> followingSet) {
         return userDao.getUserInfoByUserIds(followingSet);
+    }
+
+    public PageResult<UserInfo> pageListUserInfos(JSONObject params) {
+        Integer no = params.getInteger("no");
+        Integer size = params.getInteger("size");
+        // 起始位置
+        params.put("start", (no-1)*size);
+        // 每页数量
+        params.put("limit", size);
+
+        List<UserInfo> list = new ArrayList<>();
+        // 计算总数
+        Integer total = userDao.countUserInfos(params);
+        if (total > 0) {
+            // 查询用户信息列表
+            list = userDao.pageListUserInfos(params);
+        }
+
+        return new PageResult<>(total, list);
     }
 }

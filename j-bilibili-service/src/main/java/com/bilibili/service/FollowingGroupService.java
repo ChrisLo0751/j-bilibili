@@ -40,4 +40,8 @@ public class FollowingGroupService {
     public void deleteFollowingGroup(Long id) {
         followingGroupDao.deleteFollowingGroup(id);
     }
+
+    public List<FollowingGroup> getIserFollowingGroups(Long userId) {
+        return followingGroupDao.getUserFollowingGroups(userId);
+    }
 }

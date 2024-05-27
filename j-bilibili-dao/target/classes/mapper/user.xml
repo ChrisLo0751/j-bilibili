@@ -118,4 +118,28 @@
                 </foreach>
             </if>
     </select>
+    <select id="countUserInfos" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+            COUNT(1)
+        FROM
+            t_user_info
+        WHERE
+            1 = 1
+            <if test="nick != null and nick != ''">
+                AND nick LIKE '%${nick}%'
+            </if>
+    </select>
+    <select id="pageListUserInfos" parameterType="ava.util.Map" resultType="com.bilibili.domain.UserInfo">
+        SELECT
+            *
+        FROM
+            t_user_info
+        WHERE
+            1 = 1
+            <if test="nick != null and nick != ''">
+                AND nick LIKE '%${nick}%'
+            </if>
+        ORDER BY DESC
+        LIMIT #{start}, #{limit}
+    </select>
 </mapper>

@@ -28,8 +28,8 @@
     <insert id="addFollowingGroup" parameterType="com.bilibili.domain.FollowingGroup" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO t_following_group (
             userId,
-            name,
-            type,
+            `name`,
+            `type`,
             createTime
         )
         VALUES (
