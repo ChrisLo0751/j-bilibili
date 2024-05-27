@@ -39,7 +39,7 @@
             #{createTime}
         )
     </insert>
-    <select id="getUserFollowingGroups" parameterType="java.lang.Loong" resultType="com.bilibili.domain.FollowingGroup">
+    <select id="getUserFollowingGroups" parameterType="java.lang.Long" resultType="com.bilibili.domain.FollowingGroup">
         SELECT
             *
         FROM
